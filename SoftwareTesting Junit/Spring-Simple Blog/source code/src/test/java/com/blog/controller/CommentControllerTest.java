@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import com.blog.dto.CommentRequest;
 import com.blog.service.CommentService;
 import com.blog.vo.Comment;
 import com.blog.vo.Result;
@@ -29,7 +30,7 @@ public class CommentControllerTest {
 	public void testSaveComment_emptyPostId_returnBadRequest() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		Comment comment = new Comment();
+		CommentRequest comment = new CommentRequest();
 		comment.setPostId(null);
 		comment.setUser("zahra");
 		comment.setComment("Komentar aman");
@@ -46,7 +47,7 @@ public class CommentControllerTest {
 	public void testSaveComment_emptyInput_returnBadRequest() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		Comment comment = new Comment();
+		CommentRequest comment = new CommentRequest();
 		comment.setPostId(1L);
 		comment.setUser("");
 		comment.setComment("");
@@ -63,7 +64,7 @@ public class CommentControllerTest {
 	public void testSaveComment_xssInput_returnBadRequest() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		Comment comment = new Comment();
+		CommentRequest comment = new CommentRequest();
 		comment.setPostId(1L);
 		comment.setUser("zahra");
 		comment.setComment("<script>alert(1)</script>");
@@ -80,7 +81,7 @@ public class CommentControllerTest {
 	public void testSaveComment_validInput_success() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		Comment comment = new Comment();
+		CommentRequest comment = new CommentRequest();
 		comment.setPostId(1L);
 		comment.setUser("zahra");
 		comment.setComment("Komentar aman");

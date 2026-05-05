@@ -2,7 +2,6 @@ package com.blog.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -13,80 +12,68 @@ import com.blog.vo.Post;
 @Service
 public class PostService {
 
-	@Autowired
-	PostRepository postRepository;
-	
-	@Autowired
-	PostJpaRepository jpaRepository;
+	private final PostRepository postRepository;
+	private final PostJpaRepository jpaRepository;
+
+	public PostService(PostRepository postRepository, PostJpaRepository jpaRepository) {
+		this.postRepository = postRepository;
+		this.jpaRepository = jpaRepository;
+	}
 
 	public Post getPost(Long id) {
-		Post post = jpaRepository.findOneById(id);
-		
-		return post;
+		return jpaRepository.findOneById(id);
 	}
-	
+
 	public List<Post> getPosts() {
-		List<Post> posts = jpaRepository.findAllByOrderByUpdtDateDesc();
-		return posts;
+		return jpaRepository.findAllByOrderByUpdtDateDesc();
 	}
-	
+
 	public List<Post> getPostsOrderByUpdtAsc() {
-		List<Post> posts = postRepository.findPostOrderByUpdtDateAsc();
-		return posts;
+		return postRepository.findPostOrderByUpdtDateAsc();
 	}
-	
+
 	public List<Post> getPostsOrderByRegDesc() {
-		List<Post> posts = postRepository.findPostOrderByRegDateDesc();
-		return posts;
+		return postRepository.findPostOrderByRegDateDesc();
 	}
-	
+
 	public List<Post> searchPostByTitle(String query) {
-		List<Post> posts = jpaRepository.findByTitleContainingOrderByUpdtDateDesc(query);
-		return posts;
+		return jpaRepository.findByTitleContainingOrderByUpdtDateDesc(query);
 	}
-	
+
 	public List<Post> searchPostByContent(String query) {
-		List<Post> posts = jpaRepository.findByContentContainingOrderByUpdtDateDesc(query);
-		return posts;
+		return jpaRepository.findByContentContainingOrderByUpdtDateDesc(query);
 	}
-	
-	public boolean  savePost(Post post) {
-		Post result = jpaRepository.save(post);
-		boolean isSuccess = true;
-		
-		if(result == null) {
-			isSuccess = false;
-		}
-		
-		return isSuccess;
+
+	public boolean savePost(Post post) {
+		return jpaRepository.save(post) != null;
 	}
-	
+
 	public boolean deletePost(Long id) {
 		Post result = jpaRepository.findOneById(id);
-		
-		if(result == null)
+
+		if (result == null)
 			return false;
-		
-		jpaRepository.deleteById(id);		
+
+		jpaRepository.deleteById(id);
 		return true;
 	}
-	
+
 	public boolean updatePost(Post post) {
 		Post result = jpaRepository.findOneById(post.getId());
-		
-		if(result == null)
+
+		if (result == null)
 			return false;
-		
-		if(!StringUtils.isEmpty(post.getTitle())) {
+
+		if (!StringUtils.isEmpty(post.getTitle())) {
 			result.setTitle(post.getTitle());
 		}
-		
-		if(!StringUtils.isEmpty(post.getContent())) {
+
+		if (!StringUtils.isEmpty(post.getContent())) {
 			result.setContent(post.getContent());
 		}
-		
+
 		jpaRepository.save(result);
-		
+
 		return true;
 	}
 }

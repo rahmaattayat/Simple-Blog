@@ -24,8 +24,9 @@ public class Comment {
     @Column(name="user")
 	private String user;
     
+    // ✅ rename field (fix sonar)
     @Column(name="comment")
-	private String comment;
+	private String content;
     
     @Column(name="regDate")
 	private Date regDate;
@@ -36,7 +37,7 @@ public class Comment {
 	public Comment(Long postId, String user, String comment) {
 		this.postId = postId;
 		this.user = user;
-		this.comment = comment;
+		this.content = comment;
 		this.regDate = new Date();
 	}
 
@@ -64,12 +65,13 @@ public class Comment {
 		this.user = user;
 	}
 
+	// ✅ tetap pakai nama lama → biar test & API aman
 	public String getComment() {
-		return comment;
+		return content;
 	}
 
 	public void setComment(String comment) {
-		this.comment = comment;
+		this.content = comment;
 	}
 
 	public Date getRegDate() {

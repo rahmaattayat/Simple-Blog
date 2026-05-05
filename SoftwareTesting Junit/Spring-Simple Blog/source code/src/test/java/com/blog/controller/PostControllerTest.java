@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import com.blog.dto.PostRequest;
 import com.blog.service.PostService;
 import com.blog.vo.Post;
 import com.blog.vo.Result;
@@ -29,7 +30,7 @@ public class PostControllerTest {
 	public void testSavePost_emptyInput_returnBadRequest() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		Post post = new Post();
+		PostRequest post = new PostRequest();
 		post.setUser("");
 		post.setTitle("");
 		post.setContent("");
@@ -46,7 +47,7 @@ public class PostControllerTest {
 	public void testSavePost_xssInput_returnBadRequest() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		Post post = new Post();
+		PostRequest post = new PostRequest();
 		post.setUser("zahra");
 		post.setTitle("<script>alert(1)</script>");
 		post.setContent("konten aman");
@@ -63,7 +64,7 @@ public class PostControllerTest {
 	public void testSavePost_validInput_success() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		Post post = new Post();
+		PostRequest post = new PostRequest();
 		post.setUser("zahra");
 		post.setTitle("Judul Aman");
 		post.setContent("Konten aman");
@@ -81,7 +82,7 @@ public class PostControllerTest {
 	public void testModifyPost_emptyInput_returnBadRequest() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		Post post = new Post();
+		PostRequest post = new PostRequest();
 		post.setId(1L);
 		post.setTitle("");
 		post.setContent("");
@@ -98,7 +99,7 @@ public class PostControllerTest {
 	public void testModifyPost_xssInput_returnBadRequest() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		Post post = new Post();
+		PostRequest post = new PostRequest();
 		post.setId(1L);
 		post.setTitle("Judul Aman");
 		post.setContent("<script>alert(1)</script>");
@@ -115,7 +116,7 @@ public class PostControllerTest {
 	public void testModifyPost_validInput_success() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		Post post = new Post();
+		PostRequest post = new PostRequest();
 		post.setId(1L);
 		post.setTitle("Judul Baru");
 		post.setContent("Konten baru");
