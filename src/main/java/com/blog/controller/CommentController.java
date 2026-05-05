@@ -60,15 +60,13 @@ public class CommentController {
 	//for Exercise 4-1
 	@GetMapping("/comments")
 	public List<Comment> getComments(@RequestParam("post_id") Long postId) {
-		List<Comment> comments = commentService.getCommentList(postId);
-		return comments;
+		return commentService.getCommentList(postId);
 	}
 	
 	//for Exercise 4-2
 	@GetMapping("/comment")
 	public Comment getComment(@RequestParam("id") Long id) {
-		Comment comment = commentService.getComment(id);
-		return comment;
+		return commentService.getComment(id);
 	}
 	
 	//for Exercise 4-3
