@@ -1,3 +1,20 @@
+function formatDate(dateValue) {
+	if (!dateValue) {
+		return "-";
+	}
+
+	var date = new Date(dateValue);
+
+	var day = String(date.getDate()).padStart(2, '0');
+	var monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+	var month = monthNames[date.getMonth()];
+	var year = date.getFullYear();
+	var hour = String(date.getHours()).padStart(2, '0');
+	var minute = String(date.getMinutes()).padStart(2, '0');
+
+	return day + ' ' + month + ' ' + year + ', ' + hour + ':' + minute;
+}
+
 $(document).ready(function(){
 	var postId = $('#detail_post_id').attr("value");
 	console.log("postId - " + postId);
@@ -8,7 +25,7 @@ $(document).ready(function(){
        console.log(data);
        $('#detail_title').text(data.title);
        $('#detail_user').text(data.user);
-       $('#detail_date').text(data.updtDate);
+       $('#detail_date').text(formatDate(data.updtDate));
        $('#detail_content').text(data.content);
     }, function(err) {
     	console.log(err.responseJSON);

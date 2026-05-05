@@ -1,3 +1,20 @@
+function formatDate(dateValue) {
+	if (!dateValue) {
+		return "-";
+	}
+
+	var date = new Date(dateValue);
+
+	var day = String(date.getDate()).padStart(2, '0');
+	var monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+	var month = monthNames[date.getMonth()];
+	var year = date.getFullYear();
+	var hour = String(date.getHours()).padStart(2, '0');
+	var minute = String(date.getMinutes()).padStart(2, '0');
+
+	return day + ' ' + month + ' ' + year + ', ' + hour + ':' + minute;
+}
+
 $(document).ready(function(){
 	$.ajax({
         url: "/posts"
@@ -8,7 +25,7 @@ $(document).ready(function(){
     				+ '</h2> <p class="card-text">' + e.content 
     				+ '</p> <a href="/page/detail/' + e.id 
     				+ '" class="btn btn-primary">Read More &rarr;</a> </div> ' 
-    				+ '<div class="card-footer text-muted"> Posted on ' + e.updtDate 
+    				+ '<div class="card-footer text-muted"> Posted on ' + formatDate(e.updtDate)
     				+ ' by ' + e.user 
     				+ '</div> </div>');
     	});
@@ -45,11 +62,11 @@ $(document).ready(function(){
 	    }).then(function(data) {
 	    	window.location.href = '/';
 	    }, function(err) {
-		if (err.responseJSON && err.responseJSON.message) {
-			alert(err.responseJSON.message);
-		} else {
-			alert("Terjadi kesalahan saat menyimpan post");
-		}
-	});
+			if (err.responseJSON && err.responseJSON.message) {
+				alert(err.responseJSON.message);
+			} else {
+				alert("Terjadi kesalahan saat menyimpan post");
+			}
+		});
 	});
 });
