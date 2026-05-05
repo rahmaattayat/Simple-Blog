@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.service.PostService;
 import com.blog.vo.Post;
+import com.blog.vo.PostDTO;
 import com.blog.vo.Result;
 
 @RestController
@@ -25,6 +26,9 @@ public class PostController {
 	Logger log = LoggerFactory.getLogger(this.getClass());
     
 	private final PostService postService;
+
+	private static final String SUCCESS = "Success";
+	private static final String FAIL = "Fail";
 
 	@Autowired
 	public PostController(PostService postService) {
@@ -64,69 +68,69 @@ public class PostController {
 	}
 	
 	@PostMapping("/post")
-	public Object savePost(HttpServletResponse response, @RequestBody Post postParam) {
+	public Object savePost(HttpServletResponse response, @RequestBody PostDTO postParam) {
 		if (postParam == null ||
 			isBlank(postParam.getUser()) ||
 			isBlank(postParam.getTitle()) ||
 			isBlank(postParam.getContent())) {
-	
+
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			// pop up
 			return new Result(400, "User, title, dan content wajib diisi");
 		}
-	
+
 		Post post = new Post(
 			safe(postParam.getUser()),
 			safe(postParam.getTitle()),
 			safe(postParam.getContent())
 		);
-	
+
 		boolean isSuccess = postService.savePost(post);
-	
+
 		if (isSuccess) {
-			return new Result(200, "Success");
+			return new Result(200, SUCCESS);
 		} else {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return new Result(500, "Fail");
+			return new Result(500, FAIL);
 		}
 	}
 	
 	@DeleteMapping("/post")
 	public Object deletePost(HttpServletResponse response, @RequestParam("id") Long id)  {
 		boolean isSuccess = postService.deletePost(id);
-		
-		log.info("id ::: " + id);
-		
+
+		log.info("id ::: {}", id);
+
 		if(isSuccess) {
-			return new Result(200, "Success");
+			return new Result(200, SUCCESS);
 		} else {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return new Result(500, "Fail");
+			return new Result(500, FAIL);
 		}
 	}
 	
 	@PutMapping("/post")
-	public Object modifyPost(HttpServletResponse response, @RequestBody Post postParam) {
+	public Object modifyPost(HttpServletResponse response, @RequestBody PostDTO postParam) {
 		if (postParam == null || postParam.getId() == null ||
 			(isBlank(postParam.getTitle()) && isBlank(postParam.getContent()))) {
-	
+
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return new Result(400, "ID post wajib ada, serta title atau content wajib diisi");
 		}
-	
+
 		Post post = new Post(
 			postParam.getId(),
 			isBlank(postParam.getTitle()) ? null : safe(postParam.getTitle()),
 			isBlank(postParam.getContent()) ? null : safe(postParam.getContent())
 		);
-	
+
 		boolean isSuccess = postService.updatePost(post);
-	
+
 		if (isSuccess) {
-			return new Result(200, "Success");
+			return new Result(200, SUCCESS);
 		} else {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return new Result(500, "Fail");
+			return new Result(500, FAIL);
 		}
 	}
 
