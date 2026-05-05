@@ -85,6 +85,7 @@ $(document).ready(function(){
 				comment: comment
 		}
 		
+		// comment
 		$.ajax({
 			url: "/comment",
 			method: "POST",

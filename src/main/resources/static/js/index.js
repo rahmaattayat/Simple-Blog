@@ -32,6 +32,7 @@ $(document).ready(function(){
 			content: content
 		}
 		
+		// post
 		$.ajax({
 			url: "/post",
 			method: "POST",

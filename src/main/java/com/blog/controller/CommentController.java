@@ -31,6 +31,7 @@ public class CommentController {
 			isBlank(commentParam.getComment())) {
 	
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			// pop up
 			return new Result(400, "Username dan komentar wajib diisi");
 		}
 	
