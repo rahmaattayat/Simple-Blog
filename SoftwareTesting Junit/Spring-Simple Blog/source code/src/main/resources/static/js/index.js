@@ -13,9 +13,13 @@ $(document).ready(function(){
     				+ '</div> </div>');
     	});
        console.log(data);
-    }, function(err) {
-    	console.log(err.responseJSON);
-    });
+		}, function(err) {
+			if (err.responseJSON && err.responseJSON.message) {
+				alert(err.responseJSON.message);
+			} else {
+				alert("Terjadi kesalahan saat menyimpan post");
+			}
+		});
 	
 	$('#save_post_btn').click(function(){
 		var user = $('#create_user_text').val();
@@ -41,7 +45,11 @@ $(document).ready(function(){
 	    }).then(function(data) {
 	    	window.location.href = '/';
 	    }, function(err) {
-	    	alert(err.responseJSON);
-	    });
+		if (err.responseJSON && err.responseJSON.message) {
+			alert(err.responseJSON.message);
+		} else {
+			alert("Terjadi kesalahan saat menyimpan post");
+		}
+	});
 	});
 });
