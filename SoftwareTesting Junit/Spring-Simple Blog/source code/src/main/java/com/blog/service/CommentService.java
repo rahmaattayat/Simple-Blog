@@ -25,8 +25,7 @@ public class CommentService {
 	}
 	
 	public List<Comment> searchCommentList(Long postId, String query) {
-		return commentJpaRepository
-				.findByPostIdAndCommentContainingOrderByRegDateDesc(postId, query);
+		return commentJpaRepository.findByPostIdAndContentContainingOrderByRegDateDesc(postId, query);
 	}
 
 	public Comment getComment(Long id) {
