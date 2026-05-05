@@ -23,46 +23,44 @@ import com.blog.vo.Result;
 @RestController
 public class PostController {
 	Logger log = LoggerFactory.getLogger(this.getClass());
-	
+    
+	private final PostService postService;
+
 	@Autowired
-	PostService postService;
+	public PostController(PostService postService) {
+		this.postService = postService;
+	}
 	
 	@GetMapping("/post")
 	public Post getPost(@RequestParam("id") Long id) {
-		Post post = postService.getPost(id);
-		return post;
+		return postService.getPost(id);
 	}
 	
 	@GetMapping("/posts")
 	public List<Post> getPosts() {
-		List<Post> posts = postService.getPosts();
-		return posts;
+		return postService.getPosts();
 	}
 	
 	@GetMapping("/posts/updtdate/asc")
 	public List<Post> getPostsOrderByUpdtAsc() {
-		List<Post> posts = postService.getPostsOrderByUpdtAsc();
-		return posts;
+		return postService.getPostsOrderByUpdtAsc();
 	}
 	
 	@GetMapping("/posts/regdate/desc")
 	public List<Post> getPostsOrderByRegDesc() {
-		List<Post> posts = postService.getPostsOrderByRegDesc();
-		return posts;
+		return postService.getPostsOrderByRegDesc();
 	}
 	
 	
 	@GetMapping("/posts/search/title")
 	public List<Post> searchByTitle(@RequestParam("query") String query) {
-		List<Post> posts = postService.searchPostByTitle(query);
-		return posts;
+		return postService.searchPostByTitle(query);
 	}
 	
 	//for Exercise 4-4
 	@GetMapping("/posts/search/content")
 	public List<Post> searchByContent(@RequestParam("query") String query) {
-		List<Post> posts = postService.searchPostByContent(query);
-		return posts;
+		return postService.searchPostByContent(query);
 	}
 	
 	@PostMapping("/post")
