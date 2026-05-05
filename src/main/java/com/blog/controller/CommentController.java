@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.service.CommentService;
 import com.blog.vo.Comment;
+import com.blog.vo.CommentDTO;
 import com.blog.vo.Result;
 
 @RestController
@@ -29,7 +30,7 @@ public class CommentController {
 	}
 	
 	@PostMapping("/comment")
-	public Object savePost(HttpServletResponse response, @RequestBody Comment commentParam) {
+	public Object savePost(HttpServletResponse response, @RequestBody CommentDTO commentParam) {
 		if (commentParam == null ||
 			commentParam.getPostId() == null ||
 			isBlank(commentParam.getUser()) ||
