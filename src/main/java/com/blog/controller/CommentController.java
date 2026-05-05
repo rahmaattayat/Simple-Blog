@@ -21,7 +21,6 @@ import com.blog.vo.Result;
 @RestController
 public class CommentController {
 
-	@Autowired
 	private final CommentService commentService;
 
 	@Autowired
@@ -85,8 +84,7 @@ public class CommentController {
 	//for Exercise 4-5
 	@GetMapping("/comments/search")
 	public List<Comment> searchComments(@RequestParam("post_id") Long postId, @RequestParam("query") String query) {
-		List<Comment> comments = commentService.searchCommentList(postId, query);
-		return comments;
+		return commentService.searchCommentList(postId, query);
 	}
 
 	private boolean isBlank(String value) {
