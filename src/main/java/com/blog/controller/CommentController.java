@@ -21,7 +21,12 @@ import com.blog.vo.Result;
 public class CommentController {
 
 	@Autowired
-	CommentService commentService;
+	private final CommentService commentService;
+
+	@Autowired
+	public CommentController(CommentService commentService) {
+		this.commentService = commentService;
+	}
 	
 	@PostMapping("/comment")
 	public Object savePost(HttpServletResponse response, @RequestBody Comment commentParam) {
