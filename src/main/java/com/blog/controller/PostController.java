@@ -113,7 +113,7 @@ public class PostController {
 			(isBlank(postParam.getTitle()) && isBlank(postParam.getContent()))) {
 	
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new Result(400, "User, title, dan content wajib diisi");
+			return new Result(400, "ID post wajib ada, serta title atau content wajib diisi");
 		}
 	
 		Post post = new Post(
