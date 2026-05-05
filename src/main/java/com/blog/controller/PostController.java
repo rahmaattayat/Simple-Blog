@@ -73,6 +73,7 @@ public class PostController {
 			isBlank(postParam.getContent())) {
 	
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			// pop up
 			return new Result(400, "User, title, dan content wajib diisi");
 		}
 	
