@@ -37,11 +37,6 @@ public class CommentController {
 			return new Result(400, "User dan comment tidak boleh kosong");
 		}
 
-		if (containsScript(commentParam.getUser()) || containsScript(commentParam.getComment())) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new Result(400, "Input tidak boleh mengandung script");
-		}
-
 		Comment comment = new Comment(
 				commentParam.getPostId(),
 				sanitizeInput(commentParam.getUser()),
@@ -86,19 +81,6 @@ public class CommentController {
 
 	private boolean isEmpty(String value) {
 		return value == null || value.trim().isEmpty();
-	}
-
-	private boolean containsScript(String value) {
-		if (value == null) {
-			return false;
-		}
-
-		String lowerValue = value.toLowerCase();
-		return lowerValue.contains("<script")
-				|| lowerValue.contains("</script>")
-				|| lowerValue.contains("javascript:")
-				|| lowerValue.contains("onerror=")
-				|| lowerValue.contains("onload=");
 	}
 
 	private String sanitizeInput(String value) {

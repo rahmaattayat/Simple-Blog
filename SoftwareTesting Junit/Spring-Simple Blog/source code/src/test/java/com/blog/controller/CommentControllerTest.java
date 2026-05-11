@@ -1,6 +1,7 @@
 package com.blog.controller;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -61,7 +62,7 @@ public class CommentControllerTest {
 	}
 
 	@Test
-	public void testSaveComment_xssInput_returnBadRequest() {
+	public void testSaveComment_xssInput_sanitizedSuccess() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
 		CommentRequest comment = new CommentRequest();
@@ -69,12 +70,14 @@ public class CommentControllerTest {
 		comment.setUser("zahra");
 		comment.setComment("<script>alert(1)</script>");
 
+		when(commentService.saveComment(any(Comment.class))).thenReturn(true);
+
 		Result result = (Result) commentController.savePost(response, comment);
 
-		assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
-		assertEquals(400, result.getResult());
-		assertEquals("Input tidak boleh mengandung script", result.getMessage());
-		verify(commentService, never()).saveComment(any(Comment.class));
+		assertEquals(200, result.getResult());
+		assertEquals("Success", result.getMessage());
+
+		verify(commentService).saveComment(any(Comment.class));
 	}
 
 	@Test

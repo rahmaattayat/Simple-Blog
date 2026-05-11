@@ -45,7 +45,7 @@ public class PostControllerTest {
 	}
 
 	@Test
-	public void testSavePost_xssInput_returnBadRequest() {
+	public void testSavePost_xssInput_sanitizedSuccess() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
 		PostRequest post = new PostRequest();
@@ -53,12 +53,14 @@ public class PostControllerTest {
 		post.setTitle("<script>alert(1)</script>");
 		post.setContent("konten aman");
 
+		when(postService.savePost(any(Post.class))).thenReturn(true);
+
 		Result result = (Result) postController.savePost(response, post);
 
-		assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
-		assertEquals(400, result.getResult());
-		assertEquals("Input tidak boleh mengandung script", result.getMessage());
-		verify(postService, never()).savePost(any(Post.class));
+		assertEquals(200, result.getResult());
+		assertEquals("Success", result.getMessage());
+
+		verify(postService).savePost(any(Post.class));
 	}
 
 	@Test
@@ -97,7 +99,7 @@ public class PostControllerTest {
 	}
 
 	@Test
-	public void testModifyPost_xssInput_returnBadRequest() {
+	public void testModifyPost_xssInput_sanitizedSuccess() {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
 		PostRequest post = new PostRequest();
@@ -105,12 +107,14 @@ public class PostControllerTest {
 		post.setTitle("Judul Aman");
 		post.setContent("<script>alert(1)</script>");
 
+		when(postService.updatePost(any(Post.class))).thenReturn(true);
+
 		Result result = (Result) postController.modifyPost(response, post);
 
-		assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
-		assertEquals(400, result.getResult());
-		assertEquals("Input tidak boleh mengandung script", result.getMessage());
-		verify(postService, never()).updatePost(any(Post.class));
+		assertEquals(200, result.getResult());
+		assertEquals("Success", result.getMessage());
+
+		verify(postService).updatePost(any(Post.class));
 	}
 
 	@Test

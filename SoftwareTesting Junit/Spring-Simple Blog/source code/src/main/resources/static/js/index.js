@@ -17,26 +17,37 @@ function formatDate(dateValue) {
 
 $(document).ready(function(){
 	$.ajax({
-        url: "/posts"
-    }).then(function(data) {
-    	$.each(data, function(index, e) {
-    		$('#posts').append(
-    				'<div class="card mb-4"> <div class="card-body"> <h2 class="card-title">' + e.title 
-    				+ '</h2> <p class="card-text">' + e.content 
-    				+ '</p> <a href="/page/detail/' + e.id 
-    				+ '" class="btn btn-primary">Read More &rarr;</a> </div> ' 
-    				+ '<div class="card-footer text-muted"> Posted on ' + formatDate(e.updtDate)
-    				+ ' by ' + e.user 
-    				+ '</div> </div>');
-    	});
-       console.log(data);
-		}, function(err) {
-			if (err.responseJSON && err.responseJSON.message) {
-				alert(err.responseJSON.message);
-			} else {
-				alert("Terjadi kesalahan saat menyimpan post");
-			}
+		url: "/posts"
+	}).then(function(data) {
+		$.each(data, function(index, e) {
+			var card = $('<div>').addClass('card mb-4');
+			var cardBody = $('<div>').addClass('card-body');
+			var title = $('<h2>').addClass('card-title').text(e.title);
+			var content = $('<p>').addClass('card-text').text(e.content);
+			var readMore = $('<a>')
+				.attr('href', '/page/detail/' + e.id)
+				.addClass('btn btn-primary')
+				.html('Read More &rarr;');
+			var footer = $('<div>')
+				.addClass('card-footer text-muted')
+				.text('Posted on ' + formatDate(e.updtDate) + ' by ' + e.user);
+
+			cardBody.append(title);
+			cardBody.append(content);
+			cardBody.append(readMore);
+			card.append(cardBody);
+			card.append(footer);
+
+			$('#posts').append(card);
 		});
+		console.log(data);
+	}, function(err) {
+		if (err.responseJSON && err.responseJSON.message) {
+			alert(err.responseJSON.message);
+		} else {
+			alert("Terjadi kesalahan saat menyimpan post");
+		}
+	});
 	
 	$('#save_post_btn').click(function(){
 		var user = $('#create_user_text').val();
@@ -51,17 +62,17 @@ $(document).ready(function(){
 			user: user,
 			title: title,
 			content: content
-		}
+		};
 		
 		$.ajax({
-	        url: "/post",
-	        method: "POST",
-	        dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify(param)
-	    }).then(function(data) {
-	    	window.location.href = '/';
-	    }, function(err) {
+			url: "/post",
+			method: "POST",
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify(param)
+		}).then(function(data) {
+			window.location.href = '/';
+		}, function(err) {
 			if (err.responseJSON && err.responseJSON.message) {
 				alert(err.responseJSON.message);
 			} else {

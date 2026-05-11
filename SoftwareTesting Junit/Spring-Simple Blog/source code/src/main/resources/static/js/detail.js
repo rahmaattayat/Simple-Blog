@@ -15,48 +15,62 @@ function formatDate(dateValue) {
 	return day + ' ' + month + ' ' + year + ', ' + hour + ':' + minute;
 }
 
+function showErrorMessage(err, defaultMessage) {
+	if (err.responseJSON && err.responseJSON.message) {
+		alert(err.responseJSON.message);
+	} else {
+		alert(defaultMessage);
+	}
+}
+
 $(document).ready(function(){
 	var postId = $('#detail_post_id').attr("value");
 	console.log("postId - " + postId);
 	
 	$.ajax({
-        url: "/post?id="+postId
-    }).then(function(data) {
-       console.log(data);
-       $('#detail_title').text(data.title);
-       $('#detail_user').text(data.user);
-       $('#detail_date').text(formatDate(data.updtDate));
-       $('#detail_content').text(data.content);
-    }, function(err) {
-    	console.log(err.responseJSON);
-    });
+		url: "/post?id=" + postId
+	}).then(function(data) {
+		console.log(data);
+		$('#detail_title').text(data.title);
+		$('#detail_user').text(data.user);
+		$('#detail_date').text(formatDate(data.updtDate));
+		$('#detail_content').text(data.content);
+	}, function(err) {
+		console.log(err.responseJSON);
+	});
 	
 	$.ajax({
-        url: "/comments?post_id="+postId
-    }).then(function(data) {
-    	$.each(data, function(index, e) {
-    		$('#comments').append(
-    				'<div class="media mb-4"><div class="media-body"><h5 class="mt-0">' + e.user
-    				+ '</h5>' + e.comment 
-    	            + '</div></div>');
-    	});
-       console.log(data);
-    }, function(err) {
-    	console.log(err.responseJSON);
-    });
-	
+		url: "/comments?post_id=" + postId
+	}).then(function(data) {
+		$.each(data, function(index, e) {
+			var commentWrapper = $('<div>').addClass('media mb-4');
+			var commentBody = $('<div>').addClass('media-body');
+			var commentUser = $('<h5>').addClass('mt-0').text(e.user);
+			var commentText = $('<div>').text(e.comment);
+
+			commentBody.append(commentUser);
+			commentBody.append(commentText);
+			commentWrapper.append(commentBody);
+
+			$('#comments').append(commentWrapper);
+		});
+		console.log(data);
+	}, function(err) {
+		console.log(err.responseJSON);
+	});
 	
 	$('#detail_delete_btn').click(function(){
 		var postId = $('#detail_post_id').attr("value");
 		console.log("delete button click! - " + postId);
+
 		$.ajax({
-	        url: "/post?id="+postId,
-	        method: "DELETE"
-	    }).then(function(data) {
-	    	window.location.href = '/';
-	    }, function(err) {
-	    	alert(err.responseJSON);
-	    });
+			url: "/post?id=" + postId,
+			method: "DELETE"
+		}).then(function(data) {
+			window.location.href = '/';
+		}, function(err) {
+			showErrorMessage(err, "Terjadi kesalahan saat menghapus post");
+		});
 	});
 	
 	$('#modify_post_btn').click(function(){
@@ -72,19 +86,19 @@ $(document).ready(function(){
 			id: postId,
 			title: title,
 			content: content
-		}
+		};
 		
 		$.ajax({
-	        url: "/post",
-	        method: "PUT",
-	        dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify(param)
-	    }).then(function(data) {
-	    	window.location.href = '/page/detail/'+postId;
-	    }, function(err) {
-	    	alert(err.responseJSON);
-	    });
+			url: "/post",
+			method: "PUT",
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify(param)
+		}).then(function(data) {
+			window.location.href = '/page/detail/' + postId;
+		}, function(err) {
+			showErrorMessage(err, "Terjadi kesalahan saat mengubah post");
+		});
 	});
 	
 	$('#create_comment_btn').click(function(){
@@ -97,21 +111,21 @@ $(document).ready(function(){
 		console.log(comment);
 		
 		var param = {
-				postId: postId,
-				user: user,
-				comment: comment
-		}
+			postId: postId,
+			user: user,
+			comment: comment
+		};
 		
 		$.ajax({
-	        url: "/comment",
-	        method: "POST",
-	        dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify(param)
-	    }).then(function(data) {
-	    	window.location.href = '/page/detail/'+postId;
-	    }, function(err) {
-	    	alert(err.responseJSON);
-	    });
+			url: "/comment",
+			method: "POST",
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify(param)
+		}).then(function(data) {
+			window.location.href = '/page/detail/' + postId;
+		}, function(err) {
+			showErrorMessage(err, "Username dan komentar wajib diisi");
+		});
 	});
 });

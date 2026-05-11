@@ -68,12 +68,6 @@ public class PostController {
 			return new Result(400, "User, title, dan content tidak boleh kosong");
 		}
 
-		if (containsScript(postParam.getUser()) || containsScript(postParam.getTitle())
-				|| containsScript(postParam.getContent())) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new Result(400, "Input tidak boleh mengandung script");
-		}
-
 		Post post = new Post(
 				sanitizeInput(postParam.getUser()),
 				sanitizeInput(postParam.getTitle()),
@@ -115,11 +109,6 @@ public class PostController {
 			return new Result(400, "Title dan content tidak boleh kosong");
 		}
 
-		if (containsScript(postParam.getTitle()) || containsScript(postParam.getContent())) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return new Result(400, "Input tidak boleh mengandung script");
-		}
-
 		Post post = new Post(
 				postParam.getId(),
 				sanitizeInput(postParam.getTitle()),
@@ -137,19 +126,6 @@ public class PostController {
 
 	private boolean isEmpty(String value) {
 		return value == null || value.trim().isEmpty();
-	}
-
-	private boolean containsScript(String value) {
-		if (value == null) {
-			return false;
-		}
-
-		String lowerValue = value.toLowerCase();
-		return lowerValue.contains("<script")
-				|| lowerValue.contains("</script>")
-				|| lowerValue.contains("javascript:")
-				|| lowerValue.contains("onerror=")
-				|| lowerValue.contains("onload=");
 	}
 
 	private String sanitizeInput(String value) {
